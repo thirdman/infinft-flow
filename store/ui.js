@@ -304,6 +304,28 @@ export const actions = {
   doSearch() {
     console.log("doSearch");
   },
+  async get3Box(context) {
+    console.log("context", context);
+    const {
+      walletAddress = "0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432",
+    } = context;
+    console.group("threeBox walletAddress: ", walletAddress);
+    // const theUrl = `https://ipfs.3box.io/profile?address=${walletAddress}`;
+    const theUrl = `https://ipfs.3box.io/profile?address=0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432`;
+    console.log("async theUrl", theUrl);
+    await this.$axios
+      .get(theUrl)
+      .then((threeBoxData) => {
+        console.log("threeBoxData: ", threeBoxData);
+        const { image, name } = threeBoxData;
+        console.log({ image, name });
+      })
+      .catch((error) => {
+        alert("axios error", error);
+        console.log(error);
+      });
+    console.groupEnd();
+  },
   async handleSearch(dispatch, commit) {
     console.log("handleSearch");
     const { state } = dispatch;

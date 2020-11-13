@@ -53,6 +53,9 @@
         <div class="navItem" v-if="devMode">
           <nuxt-link to="/svg" class="w3-button navLink">SVG</nuxt-link>
         </div>
+        <div class="navItem" v-if="devMode">
+         <Button @click="get3Box">test 3 box</Button>
+        </div>
         
         <div class="wedgeWrap">
           <svg
@@ -259,6 +262,7 @@
 import { mapMutations, mapGetters, mapActions } from "vuex";
 import { connectWallet, handleAccountLink, setConnectedNetwork } from "../../utils/wallet.js";
 
+
 export default {
   // mixins: [myMixin],
   components: {
@@ -372,18 +376,23 @@ export default {
     ...mapActions({
       showStatusModal: "mintFormStore/showStatusModal",
       showCropperModal: "mintFormStore/showCropperModal",
+      get3Box: "ui/get3Box",
     }),
     walletCheck(){
       if(this.$route && this.$route.path === '/mint'){
+        let newNetwork;
         if (typeof window.ethereum !== "undefined") {
           if(!this.walletNetwork){
-            const newNetwork = this.setNetwork()
+            newNetwork = this.setNetwork()
           }
           // Get web3 instance
           const provider = window.ethereum;
           const networkVersion = provider.networkVersion;
           const siteNetwork = this.$config.network;
-          if(siteNetwork !== networkVersion){
+          const userNetwork = this.walletNetwork;
+          console.log('siteNetwork', siteNetwork)
+          console.log('networkVersion', userNetwork)
+          if(siteNetwork !== userNetwork){
             this.$nextTick(() => {
               this.handleNetworkWarning();
             })
@@ -407,7 +416,22 @@ export default {
     setWallet(value) {
       console.log("value", value);
       this.$store.commit("ui/setWallet", value);
+      if(value){
+        this.get3Box(value)
+      }
     },
+    // async get3Box(walletAddress = '0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432'){
+    //   console.group('threeBox')
+    //     const theUrl = `https://ipfs.3box.io/profile?address=${walletAddress}`
+    //     console.log('async theUrl', theUrl)
+    //     console.log('this.$axios', this.$axios);
+    //     await this.$axios.get(theUrl).then((threeBoxData) => {
+    //       console.log('threeBoxData: ', threeBoxData)
+    //       const {image, name} = threeBoxData
+    //       console.log({image, name})
+    //     }).catch(error => console.log(error));
+    //   console.groupEnd();
+    // },
     setWalletStatus(value) {
       console.log("value", value);
       this.$store.commit("ui/setWalletStatus", value);
