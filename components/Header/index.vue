@@ -57,6 +57,10 @@
          <Button @click="get3Box">test 3 box</Button>
         </div>
         
+        <div class="navItem" v-if="devMode">
+         <Button @click="get3Box2">test 3 box</Button>
+        </div>
+        
         <div class="wedgeWrap">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -390,8 +394,7 @@ export default {
           const networkVersion = provider.networkVersion;
           const siteNetwork = this.$config.network;
           const userNetwork = this.walletNetwork;
-          console.log('siteNetwork', siteNetwork)
-          console.log('networkVersion', userNetwork)
+          
           if(siteNetwork !== userNetwork){
             this.$nextTick(() => {
               this.handleNetworkWarning();
@@ -420,18 +423,21 @@ export default {
         this.get3Box(value)
       }
     },
-    // async get3Box(walletAddress = '0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432'){
-    //   console.group('threeBox')
-    //     const theUrl = `https://ipfs.3box.io/profile?address=${walletAddress}`
-    //     console.log('async theUrl', theUrl)
-    //     console.log('this.$axios', this.$axios);
-    //     await this.$axios.get(theUrl).then((threeBoxData) => {
-    //       console.log('threeBoxData: ', threeBoxData)
-    //       const {image, name} = threeBoxData
-    //       console.log({image, name})
-    //     }).catch(error => console.log(error));
-    //   console.groupEnd();
-    // },
+    async get3Box2(walletAddress = '0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432'){
+      console.group('threeBox')
+        const theUrl = `https://ipfs.3box.io/profile?address=${walletAddress}`
+        console.log('async theUrl', theUrl)
+        console.log('this.$axios', this.$axios);
+        await this.$axios.$get('http://icanhazip.com')
+
+        const test = await this.$axios.$get(theUrl).then((threeBoxData) => {
+          console.log('threeBoxData: ', threeBoxData)
+          const {image, name} = threeBoxData
+          console.log({image, name})
+        }).catch(error => console.log(error));
+        console.log('test', test)
+      console.groupEnd();
+    },
     setWalletStatus(value) {
       console.log("value", value);
       this.$store.commit("ui/setWalletStatus", value);
