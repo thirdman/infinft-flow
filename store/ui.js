@@ -305,11 +305,14 @@ export const actions = {
     console.log("doSearch");
   },
   async get3Box(context) {
+    console.log("this", this);
     console.log("context", context);
-    const {
-      walletAddress = "0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432",
-    } = context;
-    console.group("threeBox walletAddress: ", walletAddress);
+    const { $axios, state } = context;
+    console.log("axios", $axios);
+    console.log("state", state);
+
+    const { walletAddress } = state;
+    // console.group("threeBox walletAddress: ", walletAddress);
     // const theUrl = `https://ipfs.3box.io/profile?address=${walletAddress}`;
     const theUrl = `https://ipfs.3box.io/profile?address=0xd1C248d1c9879dC3b5A846D4DcCC5b7aA8fbF432`;
     console.log("async theUrl", theUrl);
