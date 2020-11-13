@@ -428,8 +428,6 @@ export default {
         const theUrl = `https://ipfs.3box.io/profile?address=${walletAddress}`
         console.log('async theUrl', theUrl)
         console.log('this.$axios', this.$axios);
-        await this.$axios.$get('http://icanhazip.com')
-
         const test = await this.$axios.$get(theUrl).then((threeBoxData) => {
           console.log('threeBoxData: ', threeBoxData)
           const {image, name} = threeBoxData
