@@ -114,6 +114,7 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     "@nuxtjs/eslint-module",
+    "@nuxtjs/google-analytics",
   ],
   /*
    ** Nuxt.js modules
@@ -126,6 +127,9 @@ export default {
     // "@nuxt/content",
     // 'vue-ethereum/nuxt',
   ],
+  googleAnalytics: {
+    id: "UA-183944269-2",
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
