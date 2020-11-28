@@ -74,6 +74,8 @@ const processUpload = async (props) => {
   // console.group("PROCESS UPLOAD");
   // console.log("PROCESS UPLOAD: ", { mode, file, context });
   // console.groupEnd();
+  // console.log("processupload context: ", context);
+  // console.log("processupload config: ", context.$config);
 
   // TOGGLE UPLOADER FUNCTIONS
   const settings = {
@@ -81,7 +83,7 @@ const processUpload = async (props) => {
     arweave: true,
     arweaveLegacy: false,
   };
-
+  console.log("upload settings: ", settings);
   const {
     setUploadStatus,
     personalSignFiles,
@@ -127,7 +129,6 @@ const processUpload = async (props) => {
         });
 
       await ipfsPromise;
-      console.log("ArUpload_uploadFile", ArUpload_uploadFile);
     }
 
     // ARWEAVE
@@ -168,22 +169,23 @@ const processUpload = async (props) => {
     // ARWEAVE LEGACY
     // TODO: refactor out.
     if (settings.arweaveLegacy) {
-      setArweaveStatus({ mode: mode, status: "uploading" });
-      const arweavePromise = ArUpload_uploadFile(file, signature)
-        .then((x) => {
-          console.log("arweave?", x);
-          fileArweaveHash = x.ArweaveTx;
-          setArweaveStatus({ mode: mode, status: "uploaded" });
-          setArweaveHash({ mode: mode, hash: fileArweaveHash });
-          return arweaveStatusCheckLoop(fileArweaveHash, context);
-        })
-        .catch((error) => {
-          console.error(error);
-          setArweaveStatus({ mode: mode, status: "error", text: error });
-          throw error;
-        });
-      await arweavePromise;
-      setArweaveStatus({ mode: mode, status: "uploaded" });
+      console.log("this would do legacy code");
+      // setArweaveStatus({ mode: mode, status: "uploading" });
+      // const arweavePromise = ArUpload_uploadFile(file, signature)
+      //   .then((x) => {
+      //     console.log("arweave?", x);
+      //     fileArweaveHash = x.ArweaveTx;
+      //     setArweaveStatus({ mode: mode, status: "uploaded" });
+      //     setArweaveHash({ mode: mode, hash: fileArweaveHash });
+      //     return arweaveStatusCheckLoop(fileArweaveHash, context);
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //     setArweaveStatus({ mode: mode, status: "error", text: error });
+      //     throw error;
+      //   });
+      // await arweavePromise;
+      // setArweaveStatus({ mode: mode, status: "uploaded" });
     }
   } catch (e) {
     // catches all errors.
@@ -423,7 +425,6 @@ const pinFileToIPFS = async (file, context, mode = "file") => {
       withCredentials: true,
       onUploadProgress: (ProgressEvent) => {
         //we mildly fake the percent loaded until the file upload success message is returned from the API
-        console.log("progress!", ProgressEvent);
         const percentLoaded =
           (ProgressEvent.loaded / ProgressEvent.total) * 100;
         const percentRounded =
@@ -445,7 +446,7 @@ const pinFileToIPFS = async (file, context, mode = "file") => {
       },
     })
     .then(function (response) {
-      console.log("IPFS: done: ", response);
+      // console.log("IPFS: done: ", response);
       setIpfsStatus({ mode: mode, status: "uploaded" });
       console.log(response.data.IpfsHash);
       setIpfsHash({ mode: mode, hash: response.data.IpfsHash });
@@ -484,7 +485,6 @@ const pinThumbnailFileToIPFS = async (sourceFile, context) => {
       },
       withCredentials: true,
       onUploadProgress: (ProgressEvent) => {
-        // console.log("ProgressEvent: ", ProgressEvent);
         setProgress({ mode, type: "ipfs", ProgressEvent, progressObj: {} });
       },
     })
@@ -515,7 +515,7 @@ const removePinFromIPFS = (hashToUnpin) => {
       },
     })
     .then((response) => {
-      console.log("IPFS File Removal response: ", response);
+      // console.log("IPFS File Removal response: ", response);
       console.log("IPFS File Removed");
       return "success";
     })
